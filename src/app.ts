@@ -7,6 +7,7 @@ import { PrismaClient } from "@prisma/client";
 import passport from "passport";
 import { localStrategy, deserialize } from "./controllers/control";
 
+dotenv.config();
 const app = express();
 const prisma = new PrismaClient();
 const assetsPath = path.join(__dirname, "public");
