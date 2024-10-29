@@ -5,7 +5,7 @@ import session from "express-session";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import { PrismaClient } from "@prisma/client";
 import passport from "passport";
-import { localStrategy, deserialize } from "./controllers/control";
+import { localStrategy, deserialize, getHome } from "./controllers/control";
 
 dotenv.config();
 const app = express();
@@ -36,6 +36,8 @@ app.use(passport.session());
 passport.use(localStrategy);
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser(deserialize);
+
+app.get("/", getHome);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
