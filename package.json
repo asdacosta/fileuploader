@@ -13,18 +13,22 @@
   },
   "name": "fileuploader",
   "version": "1.0.0",
+  "type": "module",
   "description": "A paragon of Google drive using Prisma and Express",
-  "main": "index.js",
+  "main": "dist/app.js",
   "devDependencies": {
     "@types/dotenv": "^8.2.3",
     "@types/express": "^5.0.0",
     "@types/express-session": "^1.18.0",
     "@types/node": "^22.8.2",
     "@types/passport": "^1.0.17",
+    "copyfiles": "^2.4.1",
     "prisma": "^5.21.1",
     "ts-node": "^10.9.2"
   },
   "scripts": {
+    "build": "tsc && copyfiles -u 1 \"src/views/**/*\" dist/",
+    "start": "node dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
