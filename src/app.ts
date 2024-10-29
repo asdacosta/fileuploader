@@ -6,10 +6,14 @@ import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import { PrismaClient } from "@prisma/client";
 import passport from "passport";
 import { localStrategy, deserialize, getHome } from "./controllers/control";
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
 dotenv.config();
 const app = express();
 const prisma = new PrismaClient();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const assetsPath = path.join(__dirname, "public");
 
 app.set("views", path.join(__dirname, "views"));
