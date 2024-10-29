@@ -26,4 +26,8 @@ const deserialize = async (id, done) => {
   }
 };
 
-export { localStrategy, deserialize };
+const getHome = async (req, res) => {
+  return res.render("index");
+};
+
+export { localStrategy, deserialize, getHome };
