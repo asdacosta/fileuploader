@@ -14,7 +14,7 @@ const app = express();
 const prisma = new PrismaClient();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const assetsPath = path.join(__dirname, "public");
+const assetsPath = path.join(__dirname, "../public");
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -42,6 +42,8 @@ passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser(deserialize);
 
 app.get("/", getHome);
+app.get("/sign-up", (_req, res) => res.render("sign-up"));
+app.get("/log-in", (_req, res) => res.render("log-in"));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
