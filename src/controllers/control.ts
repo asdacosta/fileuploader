@@ -26,7 +26,7 @@ const deserialize = async (id, done) => {
   }
 };
 
-const getHome = async (req, res) => {
+const getHome = async (_req, res) => {
   return res.render("index");
 };
 
