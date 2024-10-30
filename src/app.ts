@@ -23,7 +23,7 @@ const prisma = new PrismaClient();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const assetsPath = path.join(__dirname, "../public");
-const upload = multer({ dest: "../public/uploads/" });
+const upload = multer({ dest: path.join(__dirname, "../public/uploads/") });
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
