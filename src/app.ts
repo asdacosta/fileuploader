@@ -59,6 +59,19 @@ app.get("/", getHome);
 app.get("/sign-up", (_req, res) => res.render("sign-up"));
 app.get("/log-in", (_req, res) => res.render("log-in"));
 app.get("/log-out", getLogOut);
+app.get("/uploads/:folder", async (req, res) => {
+  const files = await prisma.file.findMany({
+    select: { fileUrl: true },
+  });
+  console.log("Files here: ", files);
+
+  res.render("folder", {
+    folder: req.params.folder,
+    uploadMessage: "",
+    user: req.user,
+    files,
+  });
+});
 
 app.post("/sign-up", signUpValidation, postSignUp);
 app.post(
@@ -68,17 +81,17 @@ app.post(
     failureRedirect: "/log-in",
   })
 );
-app.post("/upload", upload.single("upload"), async (req, res) => {
+app.post("/upload/:folder", upload.single("upload"), async (req, res) => {
   if (!req.file) {
-    return res.status(400).render("index", {
-      user: req.user,
+    return res.status(400).render("folder", {
+      folder: req.params.folder,
       uploadMessage: "No file uploaded.",
     });
   }
 
   if (!req.user) {
-    return res.status(401).render("index", {
-      user: null, // or handle user as you see fit
+    return res.status(401).render("folder", {
+      folder: req.params.folder,
       uploadMessage: "User not authenticated.",
     });
   }
@@ -90,8 +103,8 @@ app.post("/upload", upload.single("upload"), async (req, res) => {
   });
 
   if (!foundUser) {
-    return res.status(404).render("index", {
-      user: req.user,
+    return res.status(404).render("folder", {
+      folder: req.params.folder,
       uploadMessage: "User not found.",
     });
   }
@@ -99,11 +112,11 @@ app.post("/upload", upload.single("upload"), async (req, res) => {
   await prisma.file.create({
     data: {
       userId: foundUser.id,
-      fileUrl: req.file.path,
+      fileUrl: req.file.filename + `${req.params.folder}`,
     },
   });
-  res.render("index", {
-    user: req.user,
+  res.render("folder", {
+    folder: req.params.folder,
     uploadMessage: "File uploaded successfully!",
   });
 });
