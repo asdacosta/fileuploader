@@ -33,9 +33,51 @@ nav > section:last-child {
   gap: 1rem;
 }
 
-.home {
+.home,
+.folder {
   display: flex;
   flex-direction: column;
+}
+
+.folder form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.folders {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 0 0 2rem 0;
+  width: 100%;
+}
+
+.folders > a {
+  height: 5rem;
+  width: 8rem;
+  background-color: burlywood;
+  border-radius: 0.5rem;
+  box-shadow: 0.1rem 0.1rem 0.2rem rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+
+.folders > a:first-child::after,
+.folders > a:last-child::after {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  white-space: nowrap;
+}
+
+.folders > a:first-child::after {
+  content: "Wild Animals";
+}
+
+.folders > a:last-child::after {
+  content: "Pets";
 }
 
 .signUp {
