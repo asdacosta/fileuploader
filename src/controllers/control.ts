@@ -7,7 +7,7 @@ const localStrategy = new LocalStrategy(
   { usernameField: "email" },
   async (email, password, done) => {
     try {
-      const user = await prisma.users.findUnique({ where: { email } });
+      const user = await prisma.user.findUnique({ where: { email } });
       if (!user || user.password !== password) return done(null, false);
       return done(null, user);
     } catch (error) {
@@ -18,7 +18,7 @@ const localStrategy = new LocalStrategy(
 
 const deserialize = async (id, done) => {
   try {
-    const user = await prisma.users.findUnique({ where: { id } });
+    const user = await prisma.user.findUnique({ where: { id } });
     if (!user) return done(null, false);
     done(null, user);
   } catch (error) {
