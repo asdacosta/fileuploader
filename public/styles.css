@@ -33,6 +33,11 @@ nav > section:last-child {
   gap: 1rem;
 }
 
+.home {
+  display: flex;
+  flex-direction: column;
+}
+
 .signUp {
   display: flex;
   flex-direction: column;
