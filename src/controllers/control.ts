@@ -72,7 +72,7 @@ const deserialize = async (user, done) => {
 };
 
 const getHome = async (req, res) => {
-  return res.render("index", { user: req.user });
+  return res.render("index", { user: req.user, uploadMessage: "" });
 };
 
 const postSignUp = async (req, res, next) => {
@@ -100,7 +100,7 @@ const postSignUp = async (req, res, next) => {
     const user = await prisma.user.findUnique({
       where: { email: req.body.email },
     });
-    return res.render("index", { user });
+    return res.render("index", { user, uploadMessage: "" });
   } catch (error) {
     return next(error);
   }
@@ -112,9 +112,6 @@ const getLogOut = (req, res, next) => {
     res.redirect("/");
   });
 };
-
-const allUsers = await prisma.user.findMany();
-console.log(allUsers);
 
 export {
   localStrategy,
