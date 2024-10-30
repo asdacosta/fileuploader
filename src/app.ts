@@ -45,6 +45,8 @@ app.get("/", getHome);
 app.get("/sign-up", (_req, res) => res.render("sign-up"));
 app.get("/log-in", (_req, res) => res.render("log-in"));
 
+app.post("/upload", (_req, res) => res.redirect("/"));
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Ongoing on ${PORT} now!`);
