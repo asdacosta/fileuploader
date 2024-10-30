@@ -24,9 +24,11 @@
     <main class="home">
       <% if (locals.user) { %>
       <h1>You can start uploading files</h1>
-      <form action="/upload" method="POST">
+      <form action="/upload" method="POST" enctype="multipart/form-data">
         <input type="file" name="upload" id="upload" />
+        <button>Upload</button>
       </form>
+      <p><%= uploadMessage %></p>
       <% } else { %>
       <h1>Welcome to FileUploader</h1>
       <% } %>
