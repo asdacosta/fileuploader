@@ -21,9 +21,19 @@ model Session {
   expiresAt DateTime
 }
 
-model Users {
-  id       String @id
-  name     String
-  password String
-  email    String @unique
+model User {
+  id         Int    @id @default(autoincrement())
+  first_name String
+  last_name  String
+  email      String @unique
+  password   String
+  files      File[]
+}
+
+model File {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
+  fileUrl    String
+  uploadedAt DateTime @default(now())
 }
