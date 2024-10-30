@@ -9,21 +9,23 @@
   <body>
     <nav>
       <section>
-        <span>FileUploader</span>
+        <a href="/">FileUploader</a>
       </section>
       <section>
         <a href="/">Home</a>
+        <% if (locals.user) { %>
+        <a href="/log-out">Log Out</a>
+        <% } else { %>
         <a href="/log-in">Log In</a>
         <a href="/sign-up">Sign Up</a>
+        <% } %>
       </section>
     </nav>
-    <main>
+    <main class="home">
       <% if (locals.user) { %>
-      <h1>You can start uploading files.</h1>
+      <h1>You can start uploading files</h1>
       <form action="/upload" method="POST">
-        <label for="upload">Upload Files</label>
         <input type="file" name="upload" id="upload" />
-        <button>Upload</button>
       </form>
       <% } else { %>
       <h1>Welcome to FileUploader</h1>
