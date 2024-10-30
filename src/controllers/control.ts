@@ -1,5 +1,5 @@
 import { Strategy as LocalStrategy } from "passport-local";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 import { validationResult, body } from "express-validator";
 import pkg from "bcryptjs";
 const { hash, compare } = pkg;
@@ -113,6 +113,67 @@ const getLogOut = (req, res, next) => {
   });
 };
 
+const getFolder = async (req, res) => {
+  const files = await prisma.file.findMany({
+    select: { fileUrl: true },
+  });
+
+  res.render("folder", {
+    folder: req.params.folder,
+    uploadMessage: "",
+    user: req.user,
+    files,
+  });
+};
+
+const postFolder = async (req, res) => {
+  const files = await prisma.file.findMany({
+    select: { fileUrl: true },
+  });
+
+  if (!req.file) {
+    return res.status(400).render("folder", {
+      folder: req.params.folder,
+      uploadMessage: "No file uploaded.",
+      files,
+    });
+  }
+
+  if (!req.user) {
+    return res.status(401).render("folder", {
+      folder: req.params.folder,
+      uploadMessage: "User not authenticated.",
+      files,
+    });
+  }
+
+  const foundUser = await prisma.user.findUnique({
+    where: {
+      email: (req.user as User).email,
+    },
+  });
+
+  if (!foundUser) {
+    return res.status(404).render("folder", {
+      folder: req.params.folder,
+      uploadMessage: "User not found.",
+      files,
+    });
+  }
+
+  await prisma.file.create({
+    data: {
+      userId: foundUser.id,
+      fileUrl: req.file.filename + `${req.params.folder}`,
+    },
+  });
+  res.render("folder", {
+    folder: req.params.folder,
+    uploadMessage: "File uploaded successfully!",
+    files,
+  });
+};
+
 export {
   localStrategy,
   deserialize,
@@ -120,4 +181,6 @@ export {
   postSignUp,
   signUpValidation,
   getLogOut,
+  getFolder,
+  postFolder,
 };
