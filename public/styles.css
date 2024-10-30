@@ -1,18 +1,36 @@
+* {
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
 body {
-  position: relative;
-  min-height: 100vh;
-  width: 100vw;
+  height: 100vh;
+  width: 100%;
+  background-color: rgba(222, 184, 135, 0.25);
 }
 
 main {
-  margin-top: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 nav {
   display: flex;
   justify-content: space-between;
-  width: 100vw;
+  align-items: center;
   position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 2rem 3rem;
+  background-color: burlywood;
+}
+
+nav > section:last-child {
+  display: flex;
+  gap: 1rem;
 }
 
 .signUp {
@@ -46,4 +64,9 @@ nav {
   padding: 0.3rem 0.7rem;
   border-radius: 0.5rem;
   transition: all 0.2s ease-in-out;
+}
+
+a {
+  text-decoration: none;
+  color: black;
 }
