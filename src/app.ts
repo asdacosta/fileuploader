@@ -5,7 +5,14 @@ import session from "express-session";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import { PrismaClient } from "@prisma/client";
 import passport from "passport";
-import { localStrategy, deserialize, getHome } from "./controllers/control";
+import {
+  localStrategy,
+  deserialize,
+  getHome,
+  signUpValidation,
+  postSignUp,
+  getLogOut,
+} from "./controllers/control";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -41,11 +48,24 @@ passport.use(localStrategy);
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser(deserialize);
 
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  next();
+});
+
 app.get("/", getHome);
 app.get("/sign-up", (_req, res) => res.render("sign-up"));
 app.get("/log-in", (_req, res) => res.render("log-in"));
+app.get("/log-out", getLogOut);
 
-app.post("/upload", (_req, res) => res.redirect("/"));
+app.post("/sign-up", signUpValidation, postSignUp);
+app.post(
+  "/log-in",
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/log-in",
+  })
+);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
