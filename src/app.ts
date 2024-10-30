@@ -3,7 +3,7 @@ import express from "express";
 import path from "node:path";
 import session from "express-session";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 import passport from "passport";
 import {
   localStrategy,
@@ -15,6 +15,7 @@ import {
 } from "./controllers/control";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import multer from "multer";
 
 dotenv.config();
 const app = express();
@@ -22,6 +23,7 @@ const prisma = new PrismaClient();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const assetsPath = path.join(__dirname, "../public");
+const upload = multer({ dest: "../public/uploads/" });
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -66,6 +68,45 @@ app.post(
     failureRedirect: "/log-in",
   })
 );
+app.post("/upload", upload.single("upload"), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).render("index", {
+      user: req.user,
+      uploadMessage: "No file uploaded.",
+    });
+  }
+
+  if (!req.user) {
+    return res.status(401).render("index", {
+      user: null, // or handle user as you see fit
+      uploadMessage: "User not authenticated.",
+    });
+  }
+
+  const foundUser = await prisma.user.findUnique({
+    where: {
+      email: (req.user as User).email,
+    },
+  });
+
+  if (!foundUser) {
+    return res.status(404).render("index", {
+      user: req.user,
+      uploadMessage: "User not found.",
+    });
+  }
+
+  await prisma.file.create({
+    data: {
+      userId: foundUser.id,
+      fileUrl: req.file.path,
+    },
+  });
+  res.render("index", {
+    user: req.user,
+    uploadMessage: "File uploaded successfully!",
+  });
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
