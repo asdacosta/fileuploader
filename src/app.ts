@@ -15,6 +15,7 @@ import {
   getFolder,
   postFolder,
   upload,
+  getDetails,
 } from "./controllers/control";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -64,19 +65,7 @@ app.get("/log-in", (_req, res) => res.render("log-in"));
 app.get("/log-out", getLogOut);
 app.get("/uploads/:folder", getFolder);
 app.get("/:url", upload.single("upload"), postFolder);
-app.get("*", async (req, res) => {
-  const foundUser = await prisma.user.findUnique({
-    where: {
-      email: (req.user as User).email,
-    },
-  });
-  const fileDetails = await prisma.file.findFirst({
-    where: {
-      userId: foundUser?.id,
-    },
-  });
-  res.render("details", { user: foundUser, details: fileDetails });
-});
+app.get("*", getDetails);
 
 app.post("/sign-up", signUpValidation, postSignUp);
 app.post(
