@@ -64,8 +64,7 @@ app.get("/sign-up", (_req, res) => res.render("sign-up"));
 app.get("/log-in", (_req, res) => res.render("log-in"));
 app.get("/log-out", getLogOut);
 app.get("/uploads/:folder", getFolder);
-app.get("/:url", upload.single("upload"), postFolder);
-app.get("*", getDetails);
+app.get("/:folder/*", getDetails);
 
 app.post("/sign-up", signUpValidation, postSignUp);
 app.post(
@@ -75,6 +74,7 @@ app.post(
     failureRedirect: "/log-in",
   })
 );
+app.post("/upload/:folder", upload.single("upload"), postFolder);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
