@@ -10,9 +10,9 @@
     <%- include("./nav") %>
     <main class="folder">
       <ul>
-        <% files.forEach(file => { %>
+        <% files.forEach(file => { %> <% if (file.folder === folder ) {%>
         <a href="/<%= folder %>/<%= file.fileUrl %>"> <%= file.fileUrl %> </a>
-        <% }); %>
+        <% }; %> <% }); %>
       </ul>
       <h1>Upload File</h1>
       <form
