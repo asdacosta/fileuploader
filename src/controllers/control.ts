@@ -3,6 +3,11 @@ import { PrismaClient, User } from "@prisma/client";
 import { validationResult, body } from "express-validator";
 import pkg from "bcryptjs";
 const { hash, compare } = pkg;
+import dotenv from "dotenv";
+import { v2 as cloudinary } from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import multer from "multer";
+dotenv.config();
 
 const prisma = new PrismaClient();
 
@@ -126,6 +131,22 @@ const getFolder = async (req, res) => {
   });
 };
 
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET,
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "uploads",
+    allowed_formats: ["jpg", "png", "pdf", "jpeg"],
+  } as any,
+});
+
+const upload = multer({ storage });
+
 const postFolder = async (req, res) => {
   const files = await prisma.file.findMany({
     select: { fileUrl: true },
@@ -164,7 +185,7 @@ const postFolder = async (req, res) => {
   await prisma.file.create({
     data: {
       userId: foundUser.id,
-      fileUrl: req.file.filename + `${req.params.folder}`,
+      fileUrl: req.file.path,
     },
   });
   res.render("folder", {
@@ -183,4 +204,5 @@ export {
   getLogOut,
   getFolder,
   postFolder,
+  upload,
 };
