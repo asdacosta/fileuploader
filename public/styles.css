@@ -46,6 +46,12 @@ nav > section:last-child {
   gap: 1rem;
 }
 
+.folder ul {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .folders {
   display: flex;
   justify-content: center;
@@ -115,5 +121,5 @@ nav > section:last-child {
 
 a {
   text-decoration: none;
-  color: black;
+  color: brown;
 }
