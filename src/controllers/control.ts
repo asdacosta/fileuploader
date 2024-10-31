@@ -120,7 +120,7 @@ const getLogOut = (req, res, next) => {
 
 const getFolder = async (req, res) => {
   const files = await prisma.file.findMany({
-    select: { fileUrl: true },
+    select: { fileUrl: true, folder: true },
   });
 
   res.render("folder", {
@@ -186,6 +186,7 @@ const postFolder = async (req, res) => {
     data: {
       userId: foundUser.id,
       fileUrl: req.file.path,
+      folder: req.params.folder,
     },
   });
   res.render("folder", {
@@ -206,7 +207,10 @@ const getDetails = async (req, res) => {
       userId: foundUser?.id,
     },
   });
-  res.render("details", { user: foundUser, details: fileDetails });
+  res.render("details", {
+    user: foundUser,
+    details: fileDetails,
+  });
 };
 
 export {
