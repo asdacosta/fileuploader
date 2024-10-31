@@ -7,24 +7,11 @@
     <title>Folder</title>
   </head>
   <body>
-    <nav>
-      <section>
-        <a href="/">FileUploader</a>
-      </section>
-      <section>
-        <a href="/">Home</a>
-        <% if (locals.user) { %>
-        <a href="/log-out">Log Out</a>
-        <% } else { %>
-        <a href="/log-in">Log In</a>
-        <a href="/sign-up">Sign Up</a>
-        <% } %>
-      </section>
-    </nav>
+    <%- include("./nav") %>
     <main class="folder">
       <ul>
         <% files.forEach(file => { %>
-        <li><%= file.fileUrl %></li>
+        <a href="/<%= folder %>/<%= file.fileUrl %>"> <%= file.fileUrl %> </a>
         <% }); %>
       </ul>
       <h1>Upload File</h1>
