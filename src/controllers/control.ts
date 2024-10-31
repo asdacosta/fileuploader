@@ -195,6 +195,20 @@ const postFolder = async (req, res) => {
   });
 };
 
+const getDetails = async (req, res) => {
+  const foundUser = await prisma.user.findUnique({
+    where: {
+      email: (req.user as User).email,
+    },
+  });
+  const fileDetails = await prisma.file.findFirst({
+    where: {
+      userId: foundUser?.id,
+    },
+  });
+  res.render("details", { user: foundUser, details: fileDetails });
+};
+
 export {
   localStrategy,
   deserialize,
@@ -205,4 +219,5 @@ export {
   getFolder,
   postFolder,
   upload,
+  getDetails,
 };
