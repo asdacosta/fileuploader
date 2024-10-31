@@ -3,7 +3,7 @@ import express from "express";
 import path from "node:path";
 import session from "express-session";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 import passport from "passport";
 import {
   localStrategy,
@@ -14,10 +14,11 @@ import {
   getLogOut,
   getFolder,
   postFolder,
+  upload,
 } from "./controllers/control";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import multer from "multer";
+// import multer from "multer";
 
 dotenv.config();
 const app = express();
@@ -25,7 +26,7 @@ const prisma = new PrismaClient();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const assetsPath = path.join(__dirname, "../public");
-const upload = multer({ dest: path.join(__dirname, "../public/uploads/") });
+// const upload = multer({ dest: path.join(__dirname, "../public/uploads/") });
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -62,6 +63,20 @@ app.get("/sign-up", (_req, res) => res.render("sign-up"));
 app.get("/log-in", (_req, res) => res.render("log-in"));
 app.get("/log-out", getLogOut);
 app.get("/uploads/:folder", getFolder);
+app.get("/:url", upload.single("upload"), postFolder);
+app.get("*", async (req, res) => {
+  const foundUser = await prisma.user.findUnique({
+    where: {
+      email: (req.user as User).email,
+    },
+  });
+  const fileDetails = await prisma.file.findFirst({
+    where: {
+      userId: foundUser?.id,
+    },
+  });
+  res.render("details", { user: foundUser, details: fileDetails });
+});
 
 app.post("/sign-up", signUpValidation, postSignUp);
 app.post(
@@ -71,7 +86,6 @@ app.post(
     failureRedirect: "/log-in",
   })
 );
-app.post("/upload/:folder", upload.single("upload"), postFolder);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
