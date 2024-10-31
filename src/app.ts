@@ -3,7 +3,7 @@ import express from "express";
 import path from "node:path";
 import session from "express-session";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
-import { PrismaClient, User } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import passport from "passport";
 import {
   localStrategy,
