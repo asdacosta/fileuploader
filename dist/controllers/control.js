@@ -3,6 +3,11 @@ import { PrismaClient } from "@prisma/client";
 import { validationResult, body } from "express-validator";
 import pkg from "bcryptjs";
 const { hash, compare } = pkg;
+import dotenv from "dotenv";
+import { v2 as cloudinary } from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import multer from "multer";
+dotenv.config();
 const prisma = new PrismaClient();
 const signUpValidation = [
     body("first_name")
@@ -109,5 +114,88 @@ const getLogOut = (req, res, next) => {
         res.redirect("/");
     });
 };
-export { localStrategy, deserialize, getHome, postSignUp, signUpValidation, getLogOut, };
+const getFolder = async (req, res) => {
+    const files = await prisma.file.findMany({
+        select: { fileUrl: true, folder: true },
+    });
+    res.render("folder", {
+        folder: req.params.folder,
+        uploadMessage: "",
+        user: req.user,
+        files,
+    });
+};
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_KEY,
+    api_secret: process.env.CLOUDINARY_SECRET,
+});
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: "uploads",
+        allowed_formats: ["jpg", "png", "pdf", "jpeg"],
+    },
+});
+const upload = multer({ storage });
+const postFolder = async (req, res) => {
+    const files = await prisma.file.findMany({
+        select: { fileUrl: true },
+    });
+    if (!req.file) {
+        return res.status(400).render("folder", {
+            folder: req.params.folder,
+            uploadMessage: "No file uploaded.",
+            files,
+        });
+    }
+    if (!req.user) {
+        return res.status(401).render("folder", {
+            folder: req.params.folder,
+            uploadMessage: "User not authenticated.",
+            files,
+        });
+    }
+    const foundUser = await prisma.user.findUnique({
+        where: {
+            email: req.user.email,
+        },
+    });
+    if (!foundUser) {
+        return res.status(404).render("folder", {
+            folder: req.params.folder,
+            uploadMessage: "User not found.",
+            files,
+        });
+    }
+    await prisma.file.create({
+        data: {
+            userId: foundUser.id,
+            fileUrl: req.file.path,
+            folder: req.params.folder,
+        },
+    });
+    res.render("folder", {
+        folder: req.params.folder,
+        uploadMessage: "File uploaded successfully!",
+        files,
+    });
+};
+const getDetails = async (req, res) => {
+    const foundUser = await prisma.user.findUnique({
+        where: {
+            email: req.user.email,
+        },
+    });
+    const fileDetails = await prisma.file.findFirst({
+        where: {
+            userId: foundUser?.id,
+        },
+    });
+    res.render("details", {
+        user: foundUser,
+        details: fileDetails,
+    });
+};
+export { localStrategy, deserialize, getHome, postSignUp, signUpValidation, getLogOut, getFolder, postFolder, upload, getDetails, };
 //# sourceMappingURL=control.js.map
