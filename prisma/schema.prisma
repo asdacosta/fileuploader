@@ -35,5 +35,6 @@ model File {
   userId     Int
   user       User     @relation(fields: [userId], references: [id])
   fileUrl    String
+  folder     String   @default("wild")
   uploadedAt DateTime @default(now())
 }
