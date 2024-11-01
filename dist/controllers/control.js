@@ -98,7 +98,7 @@ const postSignUp = async (req, res, next) => {
                 },
             });
         });
-        const user = await prisma.user.findUnique({
+        const user = await prisma.user.findFirst({
             where: { email: req.body.email },
         });
         return res.render("index", { user, uploadMessage: "" });
