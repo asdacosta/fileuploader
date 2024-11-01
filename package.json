@@ -37,7 +37,7 @@
   "scripts": {
     "build": "tsc && copyfiles -u 1 \"src/views/**/*\" dist/",
     "watch": "tsc --watch && copyfiles -u 1 \"src/views/**/*\" dist/",
-    "start": "node --watch dist/app.js",
+    "start": "node dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
