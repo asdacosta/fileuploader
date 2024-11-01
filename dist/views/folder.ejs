@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/styles.css" />
+    <title>Folder</title>
+  </head>
+  <body>
+    <%- include("./nav") %>
+    <main class="folder">
+      <ul>
+        <% files.forEach(file => { %> <% if (file.folder === folder ) {%>
+        <a href="/<%= folder %>/<%= file.fileUrl %>"> <%= file.fileUrl %> </a>
+        <% }; %> <% }); %>
+      </ul>
+      <h1>Upload File</h1>
+      <form
+        action="/upload/<%= folder %>"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <input type="file" name="upload" id="upload" />
+        <button>Upload</button>
+      </form>
+      <p><%= uploadMessage %></p>
+    </main>
+  </body>
+</html>
