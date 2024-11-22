@@ -10,6 +10,12 @@ body {
   font-family: "Raleway", sans-serif;
 }
 
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 main {
   display: flex;
   justify-content: center;
