@@ -129,6 +129,6 @@ Developers, users, and non-developers.
 
 ## 👤 Curator
 
-1. [Name](https://github.com/asdacosta)
+1. [Ace Da Costa Silvanus](https://github.com/asdacosta)
 
 **[🞁 Top](#file-uploader)**
