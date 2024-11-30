@@ -19,7 +19,7 @@
     <img src="https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white" alt="Prisma badge">
     <img src="https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=white" alt="Render badge">
     <img src="https://img.shields.io/badge/Neon-00A99D?style=for-the-badge&logo=neon&logoColor=white" alt="Neon badge">
-    <h4><a href="https://fileuploader-5pnx.onrender.com//">Live Preview</a></h4>
+    <h4><a href="https://fileuploader-5pnx.onrender.com/">Live Preview</a></h4>
 </div>
 
 <!-- **Demo:** -->
