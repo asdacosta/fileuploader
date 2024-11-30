@@ -100,7 +100,6 @@ Developers, users, and non-developers.
 | `public/*`          | Contains favicon and stylesheet that should be public for deployment service - Render.                                                                                  |
 | `prisma/*`          | Contains all files for Prisma database. The sql tables are defined and generated from `schema.prisma` and `/migrations` contains all defined migrations.                |
 | `api/`              | Contains `app.js` for deployment service - Render.                                                                                                                      |
-| `src/views/*`       | EJS (Embedded JavaScript) files.                                                                                                                                        |
 | `dist/*`            | Output files from bundling of files in directory `src/`.                                                                                                                |
 | `dist/app.ts`       | Main JavaScript output file that contains the bundled JavaScript code. Code is minified and optimized for deployment (Due to mode set to production in webpack config). |
 | `package*`          | Contains details of project and dependencies versions.                                                                                                                  |
